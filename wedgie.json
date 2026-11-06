@@ -14,20 +14,20 @@
       "fw": "0.3.76",
       "chip": "OPTIGA Trust M",
       "usb": true,
-      "label": "#d7ff63",
+      "label": "#000000",
       "icon": [
-        "............",
-        ".....ww.....",
-        ".....ww.....",
-        "....wwww....",
-        "..ggwwwwgg..",
-        ".gggwwwwggg.",
-        "....wwww....",
-        ".....ww.....",
-        "....rrrr....",
-        ".....rr.....",
-        "............",
-        "............"
+        "kkkkkkkkkkwk",
+        "kwkkkkkkkkkk",
+        "kkkkkwwkkkkk",
+        "kkkkkwwkkksk",
+        "kkkkwwwwkkkk",
+        "kkkgwbbwgkkk",
+        "kkggwwwwggkk",
+        "kgggwwwwgggk",
+        "kkkkkwwkkkkk",
+        "kwkkryyrkkkk",
+        "kkkkkrrkkkwk",
+        "kkkskkkkkkkk"
       ]
     }
   ]
