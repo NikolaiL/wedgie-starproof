@@ -1,9 +1,18 @@
 """Strict, shared-format action parsing; no hardware imports so it can be tested on a host."""
+import math
 from starproof_actions import decode_fields, certificate_der
 
 FIELDS = ("origin", "session", "challenge", "chip", "action", "from", "target", "cost", "sequence", "expires", "nonce")
 WORLDS = {"sol": "Sol", "kepler": "Kepler", "vega": "Vega", "lyra": "Lyra", "cinder": "Cinder", "moss": "Moss"}
 ARTIFACTS = {"sol": "Lunar archive", "kepler": "Ocean prism", "vega": "Stellar compass", "lyra": "Echo capsule", "cinder": "Ember seed", "moss": "Living atlas"}
+
+POSITIONS = {"sol": (0, 0), "kepler": (.9, -.6), "vega": (1.7, .5),
+             "lyra": (2.4, -.9), "cinder": (3.2, .3), "moss": (4, -.5)}
+
+
+def jump_cost(source, target):
+    a, b = POSITIONS[source], POSITIONS[target]
+    return max(2, min(8, math.ceil(math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) * 1.8)))
 
 
 def _hex(value, length):
@@ -29,14 +38,14 @@ def parse_action(text):
     action, source, target = fields["action"], fields["from"], fields["target"]
     if source not in WORLDS or target not in WORLDS:
         raise ValueError("unknown destination")
-    if action not in ("launch", "jump", "claim", "refuel"):
+    if action not in ("launch", "jump", "claim", "refuel", "scavenge"):
         raise ValueError("not a strategic action")
-    if fields["cost"] not in (("0", "3") if action == "refuel" else ("1",) if action == "jump" else ("0",)):
+    if fields["cost"] not in (("0", "4") if action == "refuel" else (str(jump_cost(source, target)),) if action == "jump" else ("0",)):
         raise ValueError("unexpected action cost")
     if action == "launch" and (source != "sol" or target != "sol" or fields["sequence"] != "0"):
         raise ValueError("bad launch")
     if action == "jump" and source == target:
         raise ValueError("choose another system")
-    if action in ("claim", "refuel") and source != target:
+    if action in ("claim", "refuel", "scavenge") and source != target:
         raise ValueError("act in the current system")
     return fields

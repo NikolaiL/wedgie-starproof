@@ -34,7 +34,7 @@ def preview(d, fields):
         d.line(39, 91, 39, 115, ui.WHITE)
         d.line(27, 103, 51, 103, ui.WHITE)
         d.text("RELIC", 19, 128, ui.MUTED)
-    elif action == "refuel":
+    elif action in ("refuel", "scavenge"):
         d.fill_rect(24, 91, 29, 40, ui.GREEN)
         d.rect(24, 91, 29, 40, ui.INK)
         d.fill_rect(31, 86, 15, 5, ui.INK)
@@ -42,11 +42,11 @@ def preview(d, fields):
     else:
         planet(d, target)
     d.big_text(WORLDS[target].upper(), 78, 83, ui.INK, 2)
-    detail = ARTIFACTS[target] if action == "claim" else "Tank: 1 jump" if action == "refuel" else "From " + WORLDS[fields["from"]]
+    detail = ARTIFACTS[target] if action == "claim" else "Up to 2 fuel" if action == "scavenge" else "Tank: 8 fuel" if action == "refuel" else "From " + WORLDS[fields["from"]]
     for i, line in enumerate(ui.wrap(detail, 19)[:2]):
         d.text(line, 78, 107 + i * 12, ui.INK)
     reward = "4 credits + new map" if target in ("kepler", "lyra") else "+4 space credits"
-    cost = reward if action == "claim" else ("Free planet cache" if fields["cost"] == "0" else fields["cost"] + " space credits") if action == "refuel" else "Jump fuel: " + fields["cost"]
+    cost = reward if action == "claim" else "Free scavenged fuel" if action == "scavenge" else ("Free planet cache" if fields["cost"] == "0" else fields["cost"] + " space credits") if action == "refuel" else "Jump fuel: " + fields["cost"]
     ui.say(d, cost, 146, ui.GREEN_D)
     ui.say(d, fields["origin"].split("//", 1)[1], 160, ui.MUTED)
     ui.say(d, "Mission " + fields["session"][:8], 173, ui.MUTED)

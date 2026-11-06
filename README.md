@@ -1,6 +1,8 @@
 # Starproof for Wedgie
 
-The installable hardware signer for [Starproof](https://starproof-wedgie.vercel.app), a space exploration game. Launch, travel, collect artifacts and refuel using a manufacturer-certified OPTIGA Trust M key. Browser game: [NikolaiL/starproof](https://github.com/NikolaiL/starproof). Shared toolkit: [wedgie-actions](https://github.com/NikolaiL/wedgie-actions).
+The installable hardware signer for [Starproof](https://starproof-wedgie.vercel.app), a space exploration game. Launch, travel, collect artifacts and refuel using a manufacturer-certified OPTIGA Trust M key. Fuel uses an 8-unit tank and distance-based jumps costing 2–8. A free cache at each planet fills the tank once; later refills cost 4 game credits. Scavenging gathers up to 2 fuel for free after approval.
+
+Browser game: [NikolaiL/starproof](https://github.com/NikolaiL/starproof). Shared toolkit: [wedgie-actions](https://github.com/NikolaiL/wedgie-actions).
 
 ## Install through wedgie.dev
 

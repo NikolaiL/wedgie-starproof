@@ -40,14 +40,14 @@ def identity():
 def handle(message):
     mid, kind = message.get("id"), message.get("type")
     if kind == "starproof_hello":
-        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.2.0"})
+        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.3.0"})
     elif kind == "starproof_sign":
         text = message.get("text")
         action = parse_action(text)
         identity()
         if action["chip"] != fingerprint:
             raise ValueError("request is for another chip")
-        titles = {"launch": "Launch mission?", "jump": "Commit jump?", "claim": "Claim artifact?", "refuel": "Refuel tank?"}
+        titles = {"launch": "Launch mission?", "jump": "Commit jump?", "claim": "Claim artifact?", "refuel": "Refuel tank?", "scavenge": "Gather fuel?"}
         kind = action["action"]
         aborted = False
 

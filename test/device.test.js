@@ -14,3 +14,8 @@ test('device accepts production origin and rejects lookalikes and altered refuel
   const code = `import sys,json\nsys.path.insert(0,'device')\nfrom starproof_protocol import parse_action\nt=json.load(sys.stdin)['text']\nassert parse_action(t)['action']=='launch'\nfor bad in (t.replace('starproof-wedgie.vercel.app','starproof-wedgie.vercel.app.evil.test'),t.replace('cost=0','cost=99')):\n try: parse_action(bad)\n except ValueError: pass\n else: raise AssertionError('unsafe payload accepted')\nprint('protocol OK')`;
   assert.match(execFileSync('python3', ['-c', code], { input: JSON.stringify({ text }), encoding: 'utf8' }), /protocol OK/);
 });
+
+test('fuel prices follow distance and free scavenging stays in the current system', () => {
+  const code = `import sys,json\nsys.path.insert(0,'device')\nfrom starproof_protocol import parse_action,jump_cost\nt=json.load(sys.stdin)['text']\nassert jump_cost('sol','kepler')==2\nassert jump_cost('sol','moss')==8\nassert parse_action(t.replace('action=launch','action=refuel').replace('cost=0','cost=4'))['cost']=='4'\nassert parse_action(t.replace('action=launch','action=scavenge'))['action']=='scavenge'\nfor bad in (t.replace('action=launch','action=refuel').replace('cost=0','cost=3'),t.replace('action=launch','action=scavenge').replace('target=sol','target=kepler')):\n try: parse_action(bad)\n except ValueError: pass\n else: raise AssertionError('invalid fuel action accepted')\nprint('fuel rules OK')`;
+  assert.match(execFileSync('python3', ['-c', code], { input: JSON.stringify({ text }), encoding: 'utf8' }), /fuel rules OK/);
+});
