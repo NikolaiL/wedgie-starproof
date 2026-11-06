@@ -4,7 +4,7 @@ The installable hardware signer for [Starproof](https://starproof-wedgie.vercel.
 
 Browser game: [NikolaiL/starproof](https://github.com/NikolaiL/starproof). Shared toolkit: [wedgie-actions](https://github.com/NikolaiL/wedgie-actions).
 
-Version 0.4.2 validates all 20 destinations and their distance-priced routes, adds browser navigation controls, and displays live game stats. The new charts found on Kepler, Lyra, Cinder, Moss and Borealis are shown with artifact rewards. Connect from the game to update older device apps; existing mission progress stays on the server.
+Version 0.4.3 validates all 20 destinations and their distance-priced routes, adds browser navigation controls, and displays live game stats. The new charts found on Kepler, Lyra, Cinder, Moss and Borealis are shown with artifact rewards. Connect from the game to update older device apps; existing mission progress stays on the server.
 
 ## Install through wedgie.dev
 
@@ -23,7 +23,7 @@ For CLI installation, clone this repository and run `python3 /path/to/wedgie.py 
 
 - **Navigation:** joystick flies; its press toggles the selected planet’s info popup. Green launches or travels to the selected planet; the second button refuels; the third scavenges; red scans the nearest planet. Shortcuts follow the browser’s confirmation switches.
 - **Signing prompt:** green approves the displayed action; red declines. A navigation press can open a signing prompt but cannot approve it; press green again after reviewing the device screen.
-- The idle display shows browser-supplied location, fuel, credits and artifacts. These are game telemetry, not trusted signing labels. Navigation pauses inside signing prompts and stops after a missed browser heartbeat.
+- The idle dashboard has a large planet heading and three high-contrast cards for fuel, credits and artifacts collected, with large numeric totals. These are browser-supplied game telemetry, not trusted signing labels. Navigation pauses inside signing prompts and stops after a missed browser heartbeat.
 - Travel previews show the destination planet, source and fuel cost.
 - Artifact previews show the relic, credits and map rewards.
 - Refills show a free cache or the exact credit price.

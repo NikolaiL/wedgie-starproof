@@ -10,7 +10,7 @@ import ui
 import wedgie
 from starproof_protocol import WORLDS, parse_action, certificate_der
 from starproof_actions import confirm_action
-from starproof_art import MissionDisplay
+from starproof_art import MissionDisplay, dashboard
 
 d = None
 keys = None
@@ -28,12 +28,7 @@ poll = None
 
 def home(note="Ready for a mission"):
     d.preview = None
-    ui.page(d, "Starproof", [(note, ui.INK),
-        (WORLDS[game_stats["location"]], ui.INK),
-        ("Fuel: %d/8  Credits: %d" % (game_stats["fuel"], game_stats["credits"]), ui.MUTED),
-        ("Artifacts: %d" % game_stats["artifacts"], ui.MUTED),
-        ("{g} go  {k} refuel  {k} gather", ui.MUTED),
-        ("{r} scan  Stick press: info", ui.MUTED)], "Joystick: fly" if linked else "Connect Starproof in browser")
+    dashboard(d, game_stats, note, linked)
 
 
 def controls(pressed, now):
@@ -68,7 +63,7 @@ def handle(message):
     if kind == "starproof_hello":
         linked = True
         last_host_at = time.ticks_ms()
-        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.4.2"})
+        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.4.3"})
     elif kind == "starproof_state":
         if message.get("location") not in WORLDS:
             raise ValueError("unknown stats location")
