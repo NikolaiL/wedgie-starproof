@@ -1,0 +1,33 @@
+{
+  "name": "wedgie-starproof",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Installable Trust M signer for Starproof on Wedgie",
+  "exports": {
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "pretest": "node tools/sync-device.js --check",
+    "sync:device": "node tools/sync-device.js"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NikolaiL/wedgie-starproof.git"
+  },
+  "files": [
+    "device/*.py",
+    "wedgie.json",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
+  "dependencies": {
+    "wedgie-actions": "https://codeload.github.com/NikolaiL/wedgie-actions/tar.gz/e17fbf990b2869ab72b87daf904903d1b75a1429"
+  }
+}

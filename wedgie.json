@@ -1,0 +1,34 @@
+{
+  "apps": [
+    {
+      "mod": "starproof",
+      "name": "Starproof",
+      "about": "Sign launches, jumps, fuel refills and artifact discoveries with your Trust M.",
+      "files": [
+        "device/starproof.py",
+        "device/starproof_protocol.py",
+        "device/starproof_actions.py",
+        "device/starproof_art.py"
+      ],
+      "entry": "run",
+      "fw": "0.3.76",
+      "chip": "OPTIGA Trust M",
+      "usb": true,
+      "label": "#d7ff63",
+      "icon": [
+        "............",
+        ".....ww.....",
+        ".....ww.....",
+        "....wwww....",
+        "..ggwwwwgg..",
+        ".gggwwwwggg.",
+        "....wwww....",
+        ".....ww.....",
+        "....rrrr....",
+        ".....rr.....",
+        "............",
+        "............"
+      ]
+    }
+  ]
+}
