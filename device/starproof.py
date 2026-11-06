@@ -31,8 +31,9 @@ def home(note="Ready for a mission"):
     ui.page(d, "Starproof", [(note, ui.INK),
         (WORLDS[game_stats["location"]], ui.INK),
         ("Fuel: %d/8  Credits: %d" % (game_stats["fuel"], game_stats["credits"]), ui.MUTED),
-        ("Artifacts: %d/20" % game_stats["artifacts"], ui.MUTED),
-        ("Browser game stats", ui.MUTED)], "Joystick: fly / press: scan" if linked else "Connect Starproof in browser")
+        ("Artifacts: %d" % game_stats["artifacts"], ui.MUTED),
+        ("{g} go  {k} refuel  {k} gather", ui.MUTED),
+        ("{r} scan  Stick press: info", ui.MUTED)], "Joystick: fly" if linked else "Connect Starproof in browser")
 
 
 def controls(pressed, now):
@@ -40,9 +41,13 @@ def controls(pressed, now):
     if not linked or time.ticks_diff(now, last_host_at) > 5000:
         return
     current = (int(keys.held("right")) - int(keys.held("left")), int(keys.held("down")) - int(keys.held("up")))
-    scan = "press" in pressed
-    if current != last_input or scan or (current != (0, 0) and time.ticks_diff(now, last_input_at) >= 80):
-        wedgie.send({"type": "starproof_input", "dx": current[0], "dy": current[1], "scan": scan})
+    scan = "Y" in pressed
+    action = next((value for key, value in (("A", "go"), ("B", "refuel"), ("X", "scavenge"), ("press", "info")) if key in pressed), None)
+    if current != last_input or scan or action or (current != (0, 0) and time.ticks_diff(now, last_input_at) >= 80):
+        message = {"type": "starproof_input", "dx": current[0], "dy": current[1], "scan": scan}
+        if action:
+            message["action"] = action
+        wedgie.send(message)
         last_input, last_input_at = current, now
 
 
@@ -63,7 +68,7 @@ def handle(message):
     if kind == "starproof_hello":
         linked = True
         last_host_at = time.ticks_ms()
-        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.4.1"})
+        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.4.2"})
     elif kind == "starproof_state":
         if message.get("location") not in WORLDS:
             raise ValueError("unknown stats location")

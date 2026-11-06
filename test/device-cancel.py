@@ -62,7 +62,10 @@ starproof.linked = True
 held = set()
 starproof.keys = types.SimpleNamespace(held=lambda key: key in held)
 starproof.time = types.SimpleNamespace(ticks_diff=lambda a,b: a-b, ticks_ms=lambda:250)
-starproof.controls(["press"],100)
+for key, action in (("A","go"),("B","refuel"),("X","scavenge"),("press","info")):
+    starproof.controls([key],100)
+    assert sent[-1] == {"type":"starproof_input","dx":0,"dy":0,"scan":False,"action":action}
+starproof.controls(["Y"],100)
 assert sent[-1] == {"type":"starproof_input","dx":0,"dy":0,"scan":True}
 held.add("right")
 starproof.controls([],200)
@@ -70,6 +73,9 @@ assert sent[-1]["dx"] == 1
 held.clear()
 starproof.controls([],220)
 assert sent[-1]["dx"] == 0
+count = len(sent)
+starproof.controls(["A"],6000)
+assert len(sent) == count, "lost host heartbeat must stop controls"
 before = dict(starproof.game_stats)
 try: starproof.handle({"id":20,"type":"starproof_state","location":"sol","fuel":99,"credits":0,"artifacts":0})
 except ValueError: pass
