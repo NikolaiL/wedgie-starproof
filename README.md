@@ -4,7 +4,7 @@ The installable hardware signer for [Starproof](https://starproof-wedgie.vercel.
 
 Browser game: [NikolaiL/starproof](https://github.com/NikolaiL/starproof). Shared toolkit: [wedgie-actions](https://github.com/NikolaiL/wedgie-actions).
 
-Version 0.4.0 validates all 20 destinations and their distance-priced routes. The new charts found on Kepler, Lyra, Cinder, Moss and Borealis are shown with artifact rewards. Connect from the game to update older device apps; existing mission progress stays on the server.
+Version 0.4.1 validates all 20 destinations and their distance-priced routes. The new charts found on Kepler, Lyra, Cinder, Moss and Borealis are shown with artifact rewards. Connect from the game to update older device apps; existing mission progress stays on the server.
 
 ## Install through wedgie.dev
 
@@ -21,6 +21,7 @@ For CLI installation, clone this repository and run `python3 /path/to/wedgie.py 
 
 ## Controls and screens
 
+- **Joystick:** fly in the browser; press the joystick to scan. The idle display shows browser-supplied location, fuel, credits and artifacts. These are game telemetry, not trusted signing labels. Controls pause inside signing prompts and stop after a missed browser heartbeat.
 - **Green:** approve the displayed action. **Red:** decline.
 - Travel previews show the destination planet, source and fuel cost.
 - Artifact previews show the relic, credits and map rewards.

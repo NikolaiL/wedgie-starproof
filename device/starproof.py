@@ -8,12 +8,17 @@ import binascii
 import lcd
 import ui
 import wedgie
-from starproof_protocol import parse_action, certificate_der
+from starproof_protocol import WORLDS, parse_action, certificate_der
 from starproof_actions import confirm_action
 from starproof_art import MissionDisplay
 
 d = None
 keys = None
+linked = False
+last_input = (0, 0)
+last_input_at = 0
+last_host_at = 0
+game_stats = {"location": "sol", "fuel": 8, "credits": 8, "artifacts": 0}
 chip = None
 cert = None
 fingerprint = None
@@ -23,7 +28,22 @@ poll = None
 
 def home(note="Ready for a mission"):
     d.preview = None
-    ui.page(d, "Starproof", [(note, ui.INK), ("Jump / refuel / explore", ui.MUTED), ("Explore freely in browser", ui.MUTED)], "{g} on a request  {r} decline")
+    ui.page(d, "Starproof", [(note, ui.INK),
+        (WORLDS[game_stats["location"]], ui.INK),
+        ("Fuel: %d/8  Credits: %d" % (game_stats["fuel"], game_stats["credits"]), ui.MUTED),
+        ("Artifacts: %d/20" % game_stats["artifacts"], ui.MUTED),
+        ("Browser game stats", ui.MUTED)], "Joystick: fly / press: scan" if linked else "Connect Starproof in browser")
+
+
+def controls(pressed, now):
+    global last_input, last_input_at
+    if not linked or time.ticks_diff(now, last_host_at) > 5000:
+        return
+    current = (int(keys.held("right")) - int(keys.held("left")), int(keys.held("down")) - int(keys.held("up")))
+    scan = "press" in pressed
+    if current != last_input or scan or (current != (0, 0) and time.ticks_diff(now, last_input_at) >= 80):
+        wedgie.send({"type": "starproof_input", "dx": current[0], "dy": current[1], "scan": scan})
+        last_input, last_input_at = current, now
 
 
 def identity():
@@ -38,9 +58,25 @@ def identity():
 
 
 def handle(message):
+    global linked, last_host_at
     mid, kind = message.get("id"), message.get("type")
     if kind == "starproof_hello":
-        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.4.0"})
+        linked = True
+        last_host_at = time.ticks_ms()
+        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.4.1"})
+    elif kind == "starproof_state":
+        if message.get("location") not in WORLDS:
+            raise ValueError("unknown stats location")
+        for field, limit in (("fuel", 8), ("credits", 1000000), ("artifacts", 20)):
+            value = message.get(field)
+            if type(value) is not int or not 0 <= value <= limit:
+                raise ValueError("bad stats " + field)
+        for field in ("location", "fuel", "credits", "artifacts"):
+            game_stats[field] = message[field]
+        linked = True
+        last_host_at = time.ticks_ms()
+        home("Flight status")
+        wedgie.send({"id": mid, "type": "starproof_state", "ok": True})
     elif kind == "starproof_sign":
         text = message.get("text")
         action = parse_action(text)
@@ -102,7 +138,8 @@ def run():
     reader = wedgie.lines()
     home()
     while True:
-        keys.pressed()
+        pressed = keys.pressed()
+        controls(pressed, time.ticks_ms())
         line = reader.pump(poll)
         if reader.intr:
             reader.intr = False
