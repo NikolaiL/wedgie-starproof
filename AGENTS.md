@@ -2,7 +2,7 @@
 
 ## Structure
 
-This repository contains the installable Starproof Wedgie app. `wedgie.json` is the installation manifest; `device/` contains its four MicroPython modules. Files flatten onto device flash, so preserve the `starproof` prefix. `starproof_actions.py` is vendored from `wedgie-actions`; `tools/sync-device.js` updates it. The browser game and server live in the separate `NikolaiL/starproof` repository.
+This repository contains the installable Starproof Wedgie app. `wedgie.json` is the installation manifest; `device/` contains its five MicroPython modules. Files flatten onto device flash, so preserve the `starproof` prefix. `starproof_actions.py` is vendored from `wedgie-actions`; `tools/sync-device.js` updates it. The browser game and server live in the separate `NikolaiL/starproof` repository.
 
 ## Development and Tests
 

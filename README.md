@@ -4,13 +4,19 @@ The installable hardware signer for [Starproof](https://starproof-wedgie.vercel.
 
 Browser game: [NikolaiL/starproof](https://github.com/NikolaiL/starproof). Shared toolkit: [wedgie-actions](https://github.com/NikolaiL/wedgie-actions).
 
-Version 0.4.3 validates all 20 destinations and their distance-priced routes, adds browser navigation controls, and displays live game stats. The new charts found on Kepler, Lyra, Cinder, Moss and Borealis are shown with artifact rewards. Connect from the game to update older device apps; existing mission progress stays on the server.
+Version 0.5.0 validates all 20 destinations and their distance-priced routes, adds browser navigation controls, and displays live game stats. The new charts found on Kepler, Lyra, Cinder, Moss and Borealis are shown with artifact rewards. Connect from the game to update older device apps; existing mission progress stays on the server.
 
 ## Dashboard preview
 
 <img src="docs/images/flight-dashboard.png" alt="Rendered Wedgie dashboard showing Borealis, fuel, credits, artifacts collected and colored navigation hints" width="360">
 
 Rendered preview of the 240×240 device screen using the MicroPython bitmap font, enlarged for readability. The dashboard shows browser-supplied game stats.
+
+## Hardware airdrop proof
+
+Version 0.5.0 adds `starproof_wallet` (read-only Safe public-key discovery) and `starproof_airdrop` (a two-page, physically approved wallet/factory proof) while Starproof stays running. The claim is fixed to STARPROOF on Base and 1,000 tokens. Review the token contract, then the full receiving Safe address. The browser can cancel either page.
+
+The app requires an already initialized and locked Safe key. It never creates, replaces or locks that key, never calls Safe Signer’s startup helper, and writes no Safe metadata. The airdrop contract and funded backend are configured separately; installing this version does not make a claim available by itself. Host tests cover the proof path; physical RAM and display behavior still need checking.
 
 ## Install through wedgie.dev
 

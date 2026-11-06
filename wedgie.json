@@ -8,7 +8,8 @@
         "device/starproof.py",
         "device/starproof_protocol.py",
         "device/starproof_actions.py",
-        "device/starproof_art.py"
+        "device/starproof_art.py",
+        "device/starproof_claim.py"
       ],
       "entry": "run",
       "fw": "0.3.76",

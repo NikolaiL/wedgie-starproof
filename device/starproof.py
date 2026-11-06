@@ -63,7 +63,7 @@ def handle(message):
     if kind == "starproof_hello":
         linked = True
         last_host_at = time.ticks_ms()
-        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.4.3"})
+        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.5.0"})
     elif kind == "starproof_state":
         if message.get("location") not in WORLDS:
             raise ValueError("unknown stats location")
@@ -77,14 +77,24 @@ def handle(message):
         last_host_at = time.ticks_ms()
         home("Flight status")
         wedgie.send({"id": mid, "type": "starproof_state", "ok": True})
-    elif kind == "starproof_sign":
+    elif kind == "starproof_wallet":
+        import starproof_claim
+        identity()
+        xy = starproof_claim.wallet_public(chip)
+        wedgie.send({"id": mid, "type": "starproof_wallet", "x": "0x" + binascii.hexlify(xy[:32]).decode(), "y": "0x" + binascii.hexlify(xy[32:]).decode(), "cert": cert})
+    elif kind in ("starproof_sign", "starproof_airdrop"):
+        is_airdrop = kind == "starproof_airdrop"
         text = message.get("text")
-        action = parse_action(text)
+        if is_airdrop:
+            import starproof_claim
+            action = starproof_claim.parse_claim(text)
+        else:
+            action = parse_action(text)
         identity()
         if action["chip"] != fingerprint:
             raise ValueError("request is for another chip")
         titles = {"launch": "Launch mission?", "jump": "Commit jump?", "claim": "Claim artifact?", "refuel": "Refuel tank?", "scavenge": "Gather fuel?"}
-        kind = action["action"]
+        kind = "airdrop" if is_airdrop else action["action"]
         aborted = False
 
         def cancelled():
@@ -109,16 +119,18 @@ def handle(message):
                 wedgie.send({"id": request.get("id") if isinstance(request, dict) else None, "type": "error", "error": str(error)})
             return aborted
 
-        d.preview = action
+        d.preview = None if is_airdrop else action
         try:
-            proof = confirm_action(chip, d, text, titles[kind], [], cancelled=cancelled)
+            proof = starproof_claim.prove(chip, d, text, cert, fingerprint, cancelled) if is_airdrop else confirm_action(chip, d, text, titles[kind], [], cancelled=cancelled)
         finally:
             d.preview = None
         if proof is None:
             wedgie.send({"id": mid, "type": "refused"})
             home("Request cancelled" if aborted else "Action declined")
             return
-        wedgie.send({"id": mid, "type": "starproof_signature", "r": proof["r"], "s": proof["s"]})
+        reply = {"id": mid, "type": "starproof_airdrop_proof" if is_airdrop else "starproof_signature"}
+        reply.update(proof)
+        wedgie.send(reply)
         home("Action signed")
     elif kind == "starproof_cancel":
         wedgie.send({"id": mid, "type": "starproof_cancelled", "cancelled": False})
