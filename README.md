@@ -4,6 +4,8 @@ The installable hardware signer for [Starproof](https://starproof-wedgie.vercel.
 
 Browser game: [NikolaiL/starproof](https://github.com/NikolaiL/starproof). Shared toolkit: [wedgie-actions](https://github.com/NikolaiL/wedgie-actions).
 
+Version 0.4.0 validates all 20 destinations and their distance-priced routes. The new charts found on Kepler, Lyra, Cinder, Moss and Borealis are shown with artifact rewards. Connect from the game to update older device apps; existing mission progress stays on the server.
+
 ## Install through wedgie.dev
 
 1. Connect your Wedgie in desktop Chrome or Edge at [wedgie.dev/connect](https://wedgie.dev/connect).

@@ -3,11 +3,9 @@ import math
 from starproof_actions import decode_fields, certificate_der
 
 FIELDS = ("origin", "session", "challenge", "chip", "action", "from", "target", "cost", "sequence", "expires", "nonce")
-WORLDS = {"sol": "Sol", "kepler": "Kepler", "vega": "Vega", "lyra": "Lyra", "cinder": "Cinder", "moss": "Moss"}
-ARTIFACTS = {"sol": "Lunar archive", "kepler": "Ocean prism", "vega": "Stellar compass", "lyra": "Echo capsule", "cinder": "Ember seed", "moss": "Living atlas"}
-
-POSITIONS = {"sol": (0, 0), "kepler": (.9, -.6), "vega": (1.7, .5),
-             "lyra": (2.4, -.9), "cinder": (3.2, .3), "moss": (4, -.5)}
+WORLDS = {'sol': 'Sol', 'kepler': 'Kepler', 'vega': 'Vega', 'lyra': 'Lyra', 'cinder': 'Cinder', 'moss': 'Moss', 'orion': 'Orion', 'nova': 'Nova', 'borealis': 'Borealis', 'glacier': 'Glacier', 'aurora': 'Aurora', 'polaris': 'Polaris', 'vulcan': 'Vulcan', 'ember': 'Ember', 'dune': 'Dune', 'mirage': 'Mirage', 'umbra': 'Umbra', 'nyx': 'Nyx', 'echo': 'Echo', 'rift': 'Rift'}
+ARTIFACTS = {'sol': 'Lunar archive', 'kepler': 'Ocean prism', 'vega': 'Stellar compass', 'lyra': 'Echo capsule', 'cinder': 'Ember seed', 'moss': 'Living atlas', 'orion': 'Comet spoon', 'nova': 'Sun marble', 'borealis': 'Aurora ribbon', 'glacier': 'Frozen hourglass', 'aurora': 'Cloud lantern', 'polaris': 'Northstar crown', 'vulcan': 'Magma heart', 'ember': 'Cinder pearl', 'dune': 'Sandglass seed', 'mirage': 'Prism bloom', 'umbra': 'Shadow key', 'nyx': 'Night compass', 'echo': 'Whisper stone', 'rift': 'Infinity pebble'}
+POSITIONS = {'sol': (0, 0), 'kepler': (0.9, -0.6), 'vega': (1.7, 0.5), 'lyra': (2.4, -0.9), 'cinder': (3.2, 0.3), 'moss': (4, -0.5), 'orion': (-1.4, -1.2), 'nova': (-1.6, 1.1), 'borealis': (-0.4, -3.2), 'glacier': (1.9, -3.6), 'aurora': (-2.6, -3.2), 'polaris': (0.8, -5.3), 'vulcan': (1.2, 2.6), 'ember': (3.3, 2.5), 'dune': (-1.2, 3.3), 'mirage': (1.3, 4.7), 'umbra': (-4.7, -0.8), 'nyx': (-4.8, 1.7), 'echo': (-4.6, -3.2), 'rift': (-6.8, 0.5)}
 
 
 def jump_cost(source, target):

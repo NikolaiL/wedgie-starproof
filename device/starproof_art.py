@@ -3,8 +3,7 @@ import lcd
 import ui
 from starproof_protocol import WORLDS, ARTIFACTS
 
-COLORS = {"sol": (255, 203, 112), "kepler": (165, 251, 179), "vega": (189, 166, 255),
-          "lyra": (255, 140, 186), "cinder": (255, 147, 101), "moss": (139, 230, 216)}
+COLORS = {'sol': (255, 203, 112), 'kepler': (165, 251, 179), 'vega': (189, 166, 255), 'lyra': (255, 140, 186), 'cinder': (255, 147, 101), 'moss': (139, 230, 216), 'orion': (255, 185, 138), 'nova': (255, 214, 104), 'borealis': (128, 255, 216), 'glacier': (168, 231, 255), 'aurora': (236, 163, 255), 'polaris': (225, 239, 255), 'vulcan': (255, 134, 122), 'ember': (255, 191, 108), 'dune': (237, 207, 136), 'mirage': (255, 153, 217), 'umbra': (168, 155, 255), 'nyx': (132, 177, 255), 'echo': (139, 221, 215), 'rift': (249, 155, 255)}
 
 
 def planet(d, target, x=39, y=111, radius=24):
@@ -45,7 +44,7 @@ def preview(d, fields):
     detail = ARTIFACTS[target] if action == "claim" else "Up to 2 fuel" if action == "scavenge" else "Tank: 8 fuel" if action == "refuel" else "From " + WORLDS[fields["from"]]
     for i, line in enumerate(ui.wrap(detail, 19)[:2]):
         d.text(line, 78, 107 + i * 12, ui.INK)
-    reward = "4 credits + new map" if target in ("kepler", "lyra") else "+4 space credits"
+    reward = "4 credits + new map" if target in ("kepler", "lyra", "moss", "cinder", "borealis") else "+4 space credits"
     cost = reward if action == "claim" else "Free scavenged fuel" if action == "scavenge" else ("Free planet cache" if fields["cost"] == "0" else fields["cost"] + " space credits") if action == "refuel" else "Jump fuel: " + fields["cost"]
     ui.say(d, cost, 146, ui.GREEN_D)
     ui.say(d, fields["origin"].split("//", 1)[1], 160, ui.MUTED)
