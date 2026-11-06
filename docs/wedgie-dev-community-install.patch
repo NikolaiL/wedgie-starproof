@@ -1,0 +1,20 @@
+--- a/src/serial/install.ts
++++ b/src/serial/install.ts
+@@ -524,7 +524,7 @@
+ export async function useApp(r: Repl, cart: Cart, onProgress: (p: number, what: string) => void, opts: { launcher?: boolean; manifest?: Manifest } = {}) {
+   startAsk();
+   const m = opts.manifest || await firmwareManifest();
+-  const ch = opts.launcher === false ? null : await checkedHave(r, m, cart.files, true);
++  const ch = opts.launcher === false || cart.unreviewed ? null : await checkedHave(r, m, cart.files, true);
+   if (ch) {
+     const sha = (n: string) => m.files.find((f) => f.name === n)?.sha256 || "";
+     const write = cart.files.filter((n) => ch.hashes[n] !== sha(n) || ch.hashes[twin(n) || ""]);    // sent again if its .py is there too (the job takes that off)
+@@ -537,7 +537,7 @@
+       return { written: j.sent, restarted: true };
+     }
+   }
+-  if (opts.launcher !== false) await checkedOnly(r, m);
++  if (opts.launcher !== false && !cart.unreviewed) await checkedOnly(r, m);
+   onProgress(0, "opening the slot");
+   if (opts.launcher === false) { await r.enter({ reset: false }); await busy(r, `Installing ${cart.name}`); }
+   else await takeOver(r, (s) => { askHint(s); if (s) onProgress(0, s); }, `Install ${cart.name}`);

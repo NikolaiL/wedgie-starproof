@@ -9,6 +9,8 @@ The installable hardware signer for [Starproof](https://starproof-wedgie.vercel.
 3. Select **Starproof**, review the source, then press the physical green button to install.
 4. Close that connection and open [Starproof](https://starproof-wedgie.vercel.app).
 
+**Current wedgie.dev installer issue:** its signed-app fallback can reject community repos with “the wedgie didn’t take it” before any files are copied. If that happens, use **Connect Wedgie** in [Starproof](https://starproof-wedgie.vercel.app), which installs this pinned app after physical approval, or use the official CLI. A small proposed upstream fix is included in [docs/wedgie-dev-community-install.patch](docs/wedgie-dev-community-install.patch); it preserves physical full-control approval for unreviewed apps and does not alter signed installs. It has not been submitted upstream or tested in their full website.
+
 Requires firmware **0.3.76+**, a 240×240 display and an **OPTIGA Trust M** chip. This is a community app, not a reviewed Wedgie shelf app. Installation selects Starproof as the running app and requires full-control approval on the device. Review [wedgie.json](wedgie.json) and [device/](device/) before installing.
 
 For CLI installation, clone this repository and run `python3 /path/to/wedgie.py install .`. Obtain the official CLI from [wedgie.dev](https://wedgie.dev/wedgie.py); it needs `pyserial`.
