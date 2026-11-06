@@ -6,6 +6,12 @@ Browser game: [NikolaiL/starproof](https://github.com/NikolaiL/starproof). Share
 
 Version 0.4.3 validates all 20 destinations and their distance-priced routes, adds browser navigation controls, and displays live game stats. The new charts found on Kepler, Lyra, Cinder, Moss and Borealis are shown with artifact rewards. Connect from the game to update older device apps; existing mission progress stays on the server.
 
+## Dashboard preview
+
+<img src="docs/images/flight-dashboard.png" alt="Rendered Wedgie dashboard showing Borealis, fuel, credits, artifacts collected and colored navigation hints" width="360">
+
+Rendered preview of the 240×240 device screen using the MicroPython bitmap font, enlarged for readability. The dashboard shows browser-supplied game stats.
+
 ## Install through wedgie.dev
 
 1. Connect your Wedgie in desktop Chrome or Edge at [wedgie.dev/connect](https://wedgie.dev/connect).
