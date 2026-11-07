@@ -30,8 +30,10 @@ class Display:
         self.fill_rect(x, y, 8 * len(value) * scale, 8 * scale, color)
 
 
-sys.modules["lcd"] = types.SimpleNamespace(LCD=Display, color=lambda *rgb: rgb)
-sys.modules["ui"] = types.SimpleNamespace(WHITE=0, INK=1, GREEN=2, GREEN_D=3, RED=4, MUTED=5,
+tints = {}
+sys.modules["lcd"] = types.SimpleNamespace(LCD=Display, color=lambda *rgb: rgb,
+    tint=lambda slot, *rgb: tints.update({slot: rgb}))
+sys.modules["ui"] = types.SimpleNamespace(WHITE=10, INK=1, GREEN=11, GREEN_D=12, RED=13, MUTED=4,
     wrap=lambda value, width: textwrap.wrap(value, width),
     band=lambda d: None,
     say=lambda d, value, y, color: d.center_text(re.sub(r"\{[grk]\}", "*", value), y, color))
@@ -51,9 +53,12 @@ class DashboardDisplay(Display):
     def fill_rect(self, x, y, width, height, color):
         assert 0 <= x < x + width <= 240
         assert 0 <= y < y + height <= 240
+        if (x, width, height) == (10, 220, 34):
+            self.backgrounds[y] = tints[color]
 
     def fill(self, color):
-        pass
+        tints.clear()
+        self.backgrounds = {}
 
     def show(self):
         pass
@@ -67,5 +72,7 @@ class DashboardDisplay(Display):
 for target in COLORS:
     for credits in (8, 16, 999, 1000, 1000000):
         for linked in (False, True):
-            dashboard(DashboardDisplay(), {"location": target, "fuel": 8, "credits": credits, "artifacts": 20}, "Flight status", linked)
+            display = DashboardDisplay()
+            dashboard(display, {"location": target, "fuel": 8, "credits": credits, "artifacts": 20}, "Flight status", linked)
+            assert display.backgrounds == {90: (215, 255, 99), 128: (255, 207, 127), 166: (255, 154, 200)}
 print("visual dashboard fits all planets and totals OK")

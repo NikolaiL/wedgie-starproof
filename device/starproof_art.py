@@ -5,22 +5,29 @@ from starproof_protocol import WORLDS, ARTIFACTS
 
 COLORS = {'sol': (255, 203, 112), 'kepler': (165, 251, 179), 'vega': (189, 166, 255), 'lyra': (255, 140, 186), 'cinder': (255, 147, 101), 'moss': (139, 230, 216), 'orion': (255, 185, 138), 'nova': (255, 214, 104), 'borealis': (128, 255, 216), 'glacier': (168, 231, 255), 'aurora': (236, 163, 255), 'polaris': (225, 239, 255), 'vulcan': (255, 134, 122), 'ember': (255, 191, 108), 'dune': (237, 207, 136), 'mirage': (255, 153, 217), 'umbra': (168, 155, 255), 'nyx': (132, 177, 255), 'echo': (139, 221, 215), 'rift': (249, 155, 255)}
 
+# Match the browser HUD using palette slots unused by the dashboard's firmware UI.
+RESOURCE_ROWS = (
+    ("FUEL", "fuel", 2, (215, 255, 99)),
+    ("CREDITS", "credits", 3, (255, 207, 127)),
+    ("ARTIFACTS", "artifacts", 5, (255, 154, 200)),
+)
+
 
 def dashboard(d, stats, note, linked):
     d.fill(ui.WHITE)
     ui.band(d)
     ui.say(d, note[:28], 42, ui.MUTED)
     d.center_text(WORLDS[stats["location"]].upper(), 60, ui.INK, 3)
-    for i, (label, field) in enumerate((("FUEL", "fuel"), ("CREDITS", "credits"), ("ARTIFACTS", "artifacts"))):
+    for i, (label, field, slot, rgb) in enumerate(RESOURCE_ROWS):
         y = 90 + i * 38
-        d.fill_rect(10, y, 220, 34, ui.INK)
-        d.fill_rect(10, y, 4, 34, ui.GREEN)
-        d.text(label, 22, y + (6 if field == "artifacts" else 13), ui.WHITE)
+        lcd.tint(slot, *rgb)
+        d.fill_rect(10, y, 220, 34, slot)
+        d.text(label, 22, y + (6 if field == "artifacts" else 13), ui.INK)
         if field == "artifacts":
-            d.text("COLLECTED", 22, y + 20, ui.WHITE)
+            d.text("COLLECTED", 22, y + 20, ui.INK)
         value = str(stats[field])
         scale = 3 if len(value) <= 3 else 2 if len(value) <= 6 else 1
-        d.big_text(value, 220 - len(value) * 8 * scale, y + (34 - 8 * scale) // 2, ui.WHITE, scale)
+        d.big_text(value, 220 - len(value) * 8 * scale, y + (34 - 8 * scale) // 2, ui.INK, scale)
     if linked:
         ui.say(d, "{g} go  {k} refuel  {k} gather", 208, ui.INK)
         ui.say(d, "{r} scan  Stick: fly / info", 224, ui.MUTED)

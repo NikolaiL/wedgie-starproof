@@ -63,7 +63,7 @@ def handle(message):
     if kind == "starproof_hello":
         linked = True
         last_host_at = time.ticks_ms()
-        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.5.0"})
+        wedgie.send({"id": mid, "type": "starproof_identity", "protocol": "starproof/v1", "cert": identity(), "cancel": True, "appVersion": "0.5.1"})
     elif kind == "starproof_state":
         if message.get("location") not in WORLDS:
             raise ValueError("unknown stats location")
